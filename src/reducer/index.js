@@ -1,6 +1,8 @@
 const initialState = {
   link: "",
-  isPaused: true
+  isPaused: true,
+  videoDuration: 0,
+  projectVolume: 0
 }
 
 export const reducer = (state = initialState, action) => {
@@ -24,6 +26,11 @@ export const reducer = (state = initialState, action) => {
       return {
         ...state,
         videoDuration: action.value
+      }
+    case "CHANGE_VOLUME":
+      return {
+        ...state,
+        projectVolume: action.value
       }
     default:
       return state
