@@ -25,3 +25,10 @@ export const changeDuration = duration => {
     value: Math.round(duration * 10) / 10
   }
 }
+
+export const changeVolume = volume => {
+  return {
+    type: "CHANGE_VOLUME",
+    value: volume
+  }
+}
