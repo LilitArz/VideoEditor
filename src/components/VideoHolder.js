@@ -4,26 +4,45 @@ import { store } from "../redux/store"
 import { connect } from "react-redux"
 import { bindActionCreators } from "redux"
 
-import { addLink } from "../redux/action"
+import { playVideo, addLink, pauseVideo, changeDuration } from "../redux/action"
 import { Button } from "./Button"
+import { Video } from "./Video"
 
 const actionCreators = dispatch =>
   bindActionCreators(
     {
-      addLink
+      playVideo,
+      addLink,
+      pauseVideo,
+      changeDuration
     },
     dispatch
   )
 const mapStateToProps = store => {
   return {
-    link: store.link
+    videoDuration: store.videoDuration,
+    link: store.link,
+    isPaused: store.isPaused
   }
 }
 
 class VideoHolder extends Component {
   render() {
     return (
-      <div>
+      <div
+        style={{
+          width: "100%",
+          height: "1000px",
+          float: "left"
+        }}
+      >
+        <Video
+          link={this.props.link}
+          isPaused={this.props.isPaused}
+          playVideo={this.props.playVideo}
+          pauseVideo={this.props.pauseVideo}
+          changeVideoDuration={this.props.changeDuration}
+        />
         <Button addLink={this.props.addLink} />
       </div>
     )
