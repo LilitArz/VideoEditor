@@ -47,7 +47,7 @@ export class Video extends Component {
               : this.props.pauseVideo()
           }}
           onLoadedMetadata={e => {
-            console.log(this.setDuration(e.target.duration))
+            this.setDuration(e.target.duration)
           }}
         />
         <img
