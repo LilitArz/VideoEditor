@@ -32,3 +32,17 @@ export const changeVolume = volume => {
     value: volume
   }
 }
+
+export const setParameters = (percent, key) => {
+  return {
+    type: "DIVIDE",
+    value: {
+      percent: percent,
+      key: key
+    }
+  }
+}
+
+export const slicer = () => {
+  return { type: "SLICE" }
+}
