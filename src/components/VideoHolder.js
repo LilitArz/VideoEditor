@@ -9,11 +9,14 @@ import {
   addLink,
   pauseVideo,
   changeDuration,
-  changeVolume
+  changeVolume,
+  setParameters,
+  slicer
 } from "../redux/action"
 import { Button } from "./Button"
 import { Video } from "./Video"
 import { Navbar } from "./Navbar"
+import { VideoSlicer } from "./videoSlicer"
 
 const actionCreators = dispatch =>
   bindActionCreators(
@@ -22,19 +25,23 @@ const actionCreators = dispatch =>
       addLink,
       pauseVideo,
       changeDuration,
-      changeVolume
+      changeVolume,
+      setParameters,
+      slicer
     },
     dispatch
   )
+
 const mapStateToProps = store => {
   return {
-    videoDuration: store.videoDuration,
-    link: store.link,
-    isPaused: store.isPaused,
-    projectVolume: store.projectVolume
+    videoDuration: store.reducer.videoDuration,
+    link: store.reducer.link,
+    isPaused: store.reducer.isPaused,
+    projectVolume: store.reducer.projectVolume,
+    slicedArray: store.sliceReducer.slicedArray,
+    sliceActionPartameters: store.sliceReducer.sliceActionPartameters
   }
 }
-
 class VideoHolder extends Component {
   render() {
     return (
@@ -61,6 +68,13 @@ class VideoHolder extends Component {
           playVideo={this.props.playVideo}
           pauseVideo={this.props.pauseVideo}
         />
+        <VideoSlicer
+          setParameters={this.props.setParameters}
+          slicer={this.props.slicer}
+          slicedArray={this.props.slicedArray}
+          sliceActionPartameters={this.props.sliceActionPartameters}
+        />
+
         <Button addLink={this.props.addLink} />
       </div>
     )
