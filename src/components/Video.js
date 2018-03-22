@@ -23,10 +23,31 @@ export class Video extends Component {
       })
     }
   }
+  playSlicedVideo = key => {
+    if (key != null) {
+      const start = this.props.slicedDurationArray[key].startPoint
+      const videoElement = document.getElementById("video")
+      videoElement.currentTime = start
+      videoElement.play()
+    }
+  }
+  pauseSlicedVideo = key => {
+    console.log("key", key)
+    if (key != null) {
+      console.log("key")
+      const videoElement = document.getElementById("video")
+      videoElement.pause()
+    }
+  }
   componentWillReceiveProps(nextProps) {
+    console.log("nextProps.isPaused", nextProps.isPaused)
     const videoElement = document.getElementById("video")
     nextProps.isPaused ? videoElement.pause() : videoElement.play()
+    nextProps.playPause.isPlayed
+      ? this.playSlicedVideo(this.props.playPause.key)
+      : this.pauseSlicedVideo(this.props.playPause.key)
   }
+
   setDuration = duration => {
     this.props.changeVideoDuration(duration)
   }
