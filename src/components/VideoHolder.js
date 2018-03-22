@@ -11,7 +11,10 @@ import {
   changeDuration,
   changeVolume,
   setParameters,
-  slicer
+  slicer,
+  clicked,
+  mouseLeave,
+  playSlicedVideo
 } from "../redux/action"
 import { Button } from "./Button"
 import { Video } from "./Video"
@@ -27,21 +30,27 @@ const actionCreators = dispatch =>
       changeDuration,
       changeVolume,
       setParameters,
-      slicer
+      slicer,
+      clicked,
+      mouseLeave,
+      playSlicedVideo
     },
     dispatch
   )
 
 const mapStateToProps = store => {
   return {
-    videoDuration: store.reducer.videoDuration,
-    link: store.reducer.link,
-    isPaused: store.reducer.isPaused,
-    projectVolume: store.reducer.projectVolume,
-    slicedArray: store.sliceReducer.slicedArray,
-    sliceActionPartameters: store.sliceReducer.sliceActionPartameters
+    videoDuration: store.videoDuration,
+    link: store.link,
+    isPaused: store.isPaused,
+    projectVolume: store.projectVolume,
+    slicedArray: store.slicedArray,
+    sliceActionPartameters: store.sliceActionPartameters,
+    slicedDurationArray: store.slicedDurationArray,
+    playPause: store.playPause
   }
 }
+
 class VideoHolder extends Component {
   render() {
     return (
@@ -58,6 +67,8 @@ class VideoHolder extends Component {
           playVideo={this.props.playVideo}
           pauseVideo={this.props.pauseVideo}
           changeVideoDuration={this.props.changeDuration}
+          slicedDurationArray={this.props.slicedDurationArray}
+          playPause={this.props.playPause}
         />
         <Navbar
           videoLink={this.props.link}
@@ -73,6 +84,10 @@ class VideoHolder extends Component {
           slicer={this.props.slicer}
           slicedArray={this.props.slicedArray}
           sliceActionPartameters={this.props.sliceActionPartameters}
+          mouseLeave={this.props.mouseLeave}
+          clicked={this.props.clicked}
+          slicedDurationArray={this.props.slicedDurationArray}
+          playSlicedVideo={this.props.playSlicedVideo}
         />
 
         <Button addLink={this.props.addLink} />
