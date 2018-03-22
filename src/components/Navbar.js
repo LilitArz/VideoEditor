@@ -5,6 +5,7 @@ export class Navbar extends Component {
     return (
       <ul
         style={{
+          listStyleType: "none",
           width: "70%",
           height: "7%",
           backgroundColor: "rgb(199, 186, 186)",
