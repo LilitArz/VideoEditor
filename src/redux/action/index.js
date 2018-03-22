@@ -44,5 +44,21 @@ export const setParameters = (percent, key) => {
 }
 
 export const slicer = () => {
-  return { type: "SLICE" }
+  return {
+    type: "SLICE"
+  }
+}
+
+export const clicked = key => {
+  return {
+    type: "CLICK",
+    value: key
+  }
+}
+
+export const playSlicedVideo = key => {
+  return {
+    type: "PLAY_SLICED_VIDEO",
+    value: key
+  }
 }
