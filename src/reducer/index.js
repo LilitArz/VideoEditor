@@ -3,21 +3,18 @@ const initialState = {
   isPaused: true,
   videoDuration: 0,
   projectVolume: 0,
+  currentTime: 0,
+  sliderLeftValues: [{ value: "0px" }],
   slicedDurationArray: [
     {
       startPoint: 0,
-      endPoint: 0,
-      key: 0,
-      isHovered: true
+      endPoint: 0
     }
   ],
-  visibleSlicerIndex: 0,
-  slicedArray: [{ width: "100%" }],
-  sliceActionPartameters: [],
-  playPause: {
-    isPlayed: false,
-    key: null
-  }
+  activePartitionIndex: 0,
+  sliceActionPartameters: {},
+  isSlicedVideoPlayed: false,
+  checkForFinish: 0
 }
 
 export const reducer = (state = initialState, action) => {
@@ -30,27 +27,22 @@ export const reducer = (state = initialState, action) => {
     case "PLAY":
       return {
         ...state,
-        isPaused: action.value
+        isPaused: false
       }
     case "PAUSE":
       return {
         ...state,
-        isPaused: action.value,
-        playPause: {
-          isPlayed: false,
-          key: state.playPause.key
-        }
+        isPaused: true,
+        isSlicedVideoPlayed: false
       }
-    case "CHANGE_DURATION":
+    case "SET_DURATION":
       return {
         ...state,
         videoDuration: action.value,
         slicedDurationArray: [
           {
             startPoint: 0,
-            endPoint: action.value,
-            key: 0,
-            isHovered: true
+            endPoint: action.value
           }
         ]
       }
@@ -60,88 +52,78 @@ export const reducer = (state = initialState, action) => {
         projectVolume: action.value
       }
 
-    case "CLICK":
-      state.slicedDurationArray[state.visibleSlicerIndex].isHovered = false
-      return {
-        ...state,
-        slicedDurationArray: [
-          ...state.slicedDurationArray.slice(0, action.value),
-          {
-            startPoint: state.slicedDurationArray[action.value].startPoint,
-            endPoint: state.slicedDurationArray[action.value].endPoint,
-            key: action.value,
-            isHovered: true
-          },
-          ...state.slicedDurationArray.slice(action.value + 1)
-        ]
-      }
     case "DIVIDE":
       return {
         ...state,
         sliceActionPartameters: {
           percent: action.value.percent,
           key: action.value.key
-        }
+        },
+        activePartitionIndex: action.value.key,
+        currentTime: state.slicedDurationArray[action.value.key].startPoint
       }
     case "SLICE":
-      if (state.sliceActionPartameters.length !== 0) {
-        const currentpartduration =
-          state.slicedDurationArray[state.sliceActionPartameters.key].endPoint -
-          state.slicedDurationArray[state.sliceActionPartameters.key].startPoint
-        const secondPartStartPoint =
-          currentpartduration * state.sliceActionPartameters.percent / 100
-        const initialPercent = Number(
-          state.slicedArray[state.sliceActionPartameters.key].width.slice(0, -1)
-        )
-        const calculatedpercent = Math.round(
-          state.sliceActionPartameters.percent * initialPercent / 100
-        )
-        return {
-          ...state,
-          slicedArray: [
-            ...state.slicedArray.slice(0, state.sliceActionPartameters.key),
-            { width: calculatedpercent + "%" },
-            { width: initialPercent - calculatedpercent + "%" },
-            ...state.slicedArray.slice(state.sliceActionPartameters.key + 1)
-          ],
-          slicedDurationArray: [
-            ...state.slicedDurationArray.slice(
-              0,
-              state.sliceActionPartameters.key
-            ),
-            {
-              startPoint:
-                state.slicedDurationArray[state.sliceActionPartameters.key]
-                  .startPoint,
-              endPoint: secondPartStartPoint,
-              key: state.sliceActionPartameters.key,
-              isHovered: true
-            },
-            {
-              startPoint: secondPartStartPoint,
-              endPoint:
-                state.slicedDurationArray[state.sliceActionPartameters.key]
-                  .endPoint,
-              key: state.sliceActionPartameters.key + 1,
-              isHovered: false
-            },
-            ...state.slicedDurationArray.slice(
-              state.sliceActionPartameters.key + 1
-            )
-          ],
-          sliceActionPartameters: []
+      const splittedParts = state.slicedDurationArray.reduce((acc, item) => {
+        const values = Object.values(item)
+        return [...acc, ...values]
+      }, [])
+
+      const positionToSplit = state.sliceActionPartameters.percent
+      const partsWithSplittingPosition = [
+        ...splittedParts,
+        positionToSplit,
+        positionToSplit
+      ]
+      const sortedParts = partsWithSplittingPosition.sort((a, b) => a - b)
+
+      const completeParts = sortedParts.reduce((acc, item, index, array) => {
+        if (index % 2 == 0) {
+          const splittedPart = {
+            startPoint: item,
+            endPoint: array[index + 1]
+          }
+          return [...acc, splittedPart]
+        } else {
+          return acc
         }
-      } else {
-        return state
+      }, [])
+      return {
+        ...state,
+        slicedDurationArray: completeParts,
+        sliderLeftValues: [
+          { value: "0px" },
+          ...state.sliderLeftValues.slice(0)
+        ],
+        currentTime: completeParts[state.activePartitionIndex].startPoint
       }
+
     case "PLAY_SLICED_VIDEO":
       return {
         ...state,
-        playPause: {
-          isPlayed: true,
-          key: action.key
-        },
+        isSlicedVideoPlayed: true,
         isPaused: false
+      }
+    case "PAUSE_SLICED_VIDEO":
+      return {
+        ...state,
+        isSlicedVideoPlayed: false,
+        isPaused: true
+      }
+    case "CHANGHE_AXIS":
+      return {
+        ...state,
+        sliderLeftValues: [
+          ...state.sliderLeftValues.slice(0, state.activePartitionIndex),
+          {
+            value: action.value
+          },
+          ...state.sliderLeftValues.slice(state.activePartitionIndex + 1)
+        ]
+      }
+    case "FINISHED":
+      return {
+        ...state,
+        checkForFinish: 0
       }
 
     default:
