@@ -5,29 +5,35 @@ export class Slider extends Component {
     super()
     this.isDowned = false
   }
+
   callback = e => {
     if (this.isDowned) {
-      document.getElementById("div").style.left = e.clientX + "px"
+      this.props.changeSliderAxis(e.clientX)
+    }
+  }
+  mouseUp = event => {
+    if (this.isDowned) {
+      this.isDowned = false
     }
   }
   componentDidMount() {
     document.body.addEventListener("mousemove", this.callback)
-    document.body.addEventListener("mouseup", () => (this.isDowned = false))
+    document.body.addEventListener("mouseup", this.mouseUp)
+  }
+  componentWillUnMount() {
+    document.body.removeEventListener("mousemove", this.callback)
+    document.body.removeEventListener("mouseup", this.mouseUp)
   }
   render() {
     return (
       <div>
         <div
-          id="div"
-          ref={left => {
-            this.left = left
-          }}
           style={{
             position: "absolute",
             width: "30px",
             height: "30px",
+            left: this.props.sliderLeftValues[this.props.index].value,
             cursor: "pointer",
-            left: "7px",
             borderRadius: "25px",
             backgroundColor: "yellow"
           }}
