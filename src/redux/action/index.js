@@ -21,7 +21,7 @@ export const pauseVideo = () => {
 
 export const changeDuration = duration => {
   return {
-    type: "CHANGE_DURATION",
+    type: "SET_DURATION",
     value: Math.round(duration * 10) / 10
   }
 }
@@ -43,22 +43,38 @@ export const setParameters = (percent, key) => {
   }
 }
 
-export const slicer = () => {
+export const slicer = (sliceActionPartameters, slicedDurationArray) => {
+  const activeVideoDuration =
+    slicedDurationArray[sliceActionPartameters.key].endPoint -
+    slicedDurationArray[sliceActionPartameters.key].startPoint
   return {
-    type: "SLICE"
+    type: "SLICE",
+    value: activeVideoDuration
   }
 }
 
-export const clicked = key => {
+export const playSlicedVideo = () => {
   return {
-    type: "CLICK",
-    value: key
+    type: "PLAY_SLICED_VIDEO"
   }
 }
 
-export const playSlicedVideo = key => {
+export const pauseSlicedVideo = () => {
   return {
-    type: "PLAY_SLICED_VIDEO",
-    value: key
+    type: "PAUSE_SLICED_VIDEO"
+  }
+}
+
+export const changeSliderAxis = axis => {
+  let checkedAxis = axis
+  return {
+    type: "CHANGHE_AXIS",
+    value: checkedAxis + "px"
+  }
+}
+
+export const finished = () => {
+  return {
+    type: "FINISHED"
   }
 }
