@@ -23,29 +23,32 @@ export class Video extends Component {
       })
     }
   }
-  playSlicedVideo = key => {
-    if (key != null) {
-      const start = this.props.slicedDurationArray[key].startPoint
+  isFinished = () => {
+    const videoElement = document.getElementById("video")
+    if (
+      videoElement.currentTime >=
+      this.props.slicedDurationArray[this.props.activePartitionIndex].endPoint
+    ) {
+      this.props.pauseVideo()
+      clearInterval(this.props.checkForFinish)
+      this.props.finished()
+    }
+  }
+  playSlicedVideo() {
+    if (this.props.activePartitionIndex != null) {
+      const start = this.props.currentTime
       const videoElement = document.getElementById("video")
       videoElement.currentTime = start
       videoElement.play()
+      this.props.checkForFinish = setInterval(this.isFinished, 1000)
     }
   }
-  pauseSlicedVideo = key => {
-    console.log("key", key)
-    if (key != null) {
-      console.log("key")
-      const videoElement = document.getElementById("video")
-      videoElement.pause()
-    }
-  }
+
   componentWillReceiveProps(nextProps) {
-    console.log("nextProps.isPaused", nextProps.isPaused)
     const videoElement = document.getElementById("video")
-    nextProps.isPaused ? videoElement.pause() : videoElement.play()
-    nextProps.playPause.isPlayed
-      ? this.playSlicedVideo(this.props.playPause.key)
-      : this.pauseSlicedVideo(this.props.playPause.key)
+    if (nextProps.isSlicedVideoPlayed) {
+      this.playSlicedVideo()
+    } else nextProps.isPaused ? videoElement.pause() : videoElement.play()
   }
 
   setDuration = duration => {
