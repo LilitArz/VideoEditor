@@ -12,9 +12,12 @@ import {
   changeVolume,
   setParameters,
   slicer,
-  clicked,
   mouseLeave,
-  playSlicedVideo
+  playSlicedVideo,
+  changeSliderAxis,
+  pauseSlicedVideo,
+  finished,
+  changeCurrentTime
 } from "../redux/action"
 import { Button } from "./Button"
 import { Video } from "./Video"
@@ -31,9 +34,12 @@ const actionCreators = dispatch =>
       changeVolume,
       setParameters,
       slicer,
-      clicked,
       mouseLeave,
-      playSlicedVideo
+      playSlicedVideo,
+      changeSliderAxis,
+      pauseSlicedVideo,
+      finished,
+      changeCurrentTime
     },
     dispatch
   )
@@ -47,7 +53,11 @@ const mapStateToProps = store => {
     slicedArray: store.slicedArray,
     sliceActionPartameters: store.sliceActionPartameters,
     slicedDurationArray: store.slicedDurationArray,
-    playPause: store.playPause
+    isSlicedVideoPlayed: store.isSlicedVideoPlayed,
+    currentTime: store.currentTime,
+    activePartitionIndex: store.activePartitionIndex,
+    sliderLeftValues: store.sliderLeftValues,
+    checkForFinish: store.checkForFinish
   }
 }
 
@@ -67,8 +77,12 @@ class VideoHolder extends Component {
           playVideo={this.props.playVideo}
           pauseVideo={this.props.pauseVideo}
           changeVideoDuration={this.props.changeDuration}
+          isSlicedVideoPlayed={this.props.isSlicedVideoPlayed}
+          activePartitionIndex={this.props.activePartitionIndex}
+          currentTime={this.props.currentTime}
           slicedDurationArray={this.props.slicedDurationArray}
-          playPause={this.props.playPause}
+          checkForFinish={this.props.checkForFinish}
+          finished={this.props.finished}
         />
         <Navbar
           videoLink={this.props.link}
@@ -80,14 +94,16 @@ class VideoHolder extends Component {
           pauseVideo={this.props.pauseVideo}
         />
         <VideoSlicer
+          isSlicedVideoPlayed={this.props.isSlicedVideoPlayed}
+          pauseSlicedVideo={this.props.pauseSlicedVideo}
           setParameters={this.props.setParameters}
           slicer={this.props.slicer}
-          slicedArray={this.props.slicedArray}
           sliceActionPartameters={this.props.sliceActionPartameters}
-          mouseLeave={this.props.mouseLeave}
-          clicked={this.props.clicked}
           slicedDurationArray={this.props.slicedDurationArray}
           playSlicedVideo={this.props.playSlicedVideo}
+          videoDuration={this.props.videoDuration}
+          changeSliderAxis={this.props.changeSliderAxis}
+          sliderLeftValues={this.props.sliderLeftValues}
         />
 
         <Button addLink={this.props.addLink} />
