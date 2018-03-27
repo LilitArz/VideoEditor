@@ -1,5 +1,12 @@
 import React, { Component } from "react"
-
+const styles = {
+  position: "absolute",
+  width: "30px",
+  height: "30px",
+  cursor: "pointer",
+  borderRadius: "25px",
+  backgroundColor: "yellow"
+}
 export class Slider extends Component {
   constructor() {
     super()
@@ -44,13 +51,8 @@ export class Slider extends Component {
         <div
           ref={ref => (this.left = ref)}
           style={{
-            position: "absolute",
-            width: "30px",
-            height: "30px",
-            left: this.props.sliderLeftValues[this.props.index].value,
-            cursor: "pointer",
-            borderRadius: "25px",
-            backgroundColor: "yellow"
+            ...styles,
+            left: this.props.sliderLeftValues[this.props.index].value
           }}
           onMouseDown={() => {
             this.isDowned = true
