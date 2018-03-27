@@ -24,9 +24,8 @@ export class Video extends Component {
     }
   }
   isFinished = () => {
-    const videoElement = document.getElementById("video")
     if (
-      videoElement.currentTime >=
+      this.values.currentTime >=
       this.props.slicedDurationArray[this.props.activePartitionIndex].endPoint
     ) {
       this.props.pauseVideo()
@@ -37,19 +36,17 @@ export class Video extends Component {
   playSlicedVideo() {
     if (this.props.activePartitionIndex != null) {
       const start = this.props.currentTime
-      const videoElement = document.getElementById("video")
-      videoElement.currentTime = start
-      videoElement.play()
+      this.values.currentTime = start
+      this.values.play()
       this.props.checkForFinish = setInterval(this.isFinished, 1000)
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    const videoElement = document.getElementById("video")
     if (nextProps.isSlicedVideoPlayed) {
       this.playSlicedVideo()
     } else {
-      nextProps.isPaused ? videoElement.pause() : videoElement.play()
+      nextProps.isPaused ? this.values.pause() : this.values.play()
     }
   }
 
@@ -61,6 +58,7 @@ export class Video extends Component {
       <div>
         <video
           id="video"
+          ref={ref => (this.values = ref)}
           style={{
             width: "73%",
             height: "20%"
