@@ -43,13 +43,40 @@ export const setParameters = (percent, key) => {
   }
 }
 
+/**
+ *
+ * @param {*} sliceActionPartameters
+ * @param {*} slicedDurationArray
+ * @description
+ */
 export const slicer = (sliceActionPartameters, slicedDurationArray) => {
-  const activeVideoDuration =
-    slicedDurationArray[sliceActionPartameters.key].endPoint -
-    slicedDurationArray[sliceActionPartameters.key].startPoint
+  const splittedParts = slicedDurationArray.reduce((acc, item) => {
+    const values = Object.values(item)
+    return [...acc, ...values]
+  }, [])
+
+  const positionToSplit = sliceActionPartameters.percent
+  const partsWithSplittingPosition = [
+    ...splittedParts,
+    positionToSplit,
+    positionToSplit
+  ]
+  const sortedParts = partsWithSplittingPosition.sort((a, b) => a - b)
+
+  const completeParts = sortedParts.reduce((acc, item, index, array) => {
+    if (index % 2 == 0) {
+      const splittedPart = {
+        startPoint: item,
+        endPoint: array[index + 1]
+      }
+      return [...acc, splittedPart]
+    } else {
+      return acc
+    }
+  }, [])
   return {
     type: "SLICE",
-    value: activeVideoDuration
+    value: completeParts
   }
 }
 
@@ -65,16 +92,54 @@ export const pauseSlicedVideo = () => {
   }
 }
 
-export const changeSliderAxis = axis => {
-  let checkedAxis = axis
+export const changeSliderAxis = (axis, activePartitionOffsets) => {
   return {
     type: "CHANGHE_AXIS",
-    value: checkedAxis + "px"
+    value: `${Math.min(axis, activePartitionOffsets.width)}px`
   }
 }
 
 export const finished = () => {
   return {
     type: "FINISHED"
+  }
+}
+
+export const deleteSelectedPart = () => {
+  return {
+    type: "DELETE"
+  }
+}
+
+export const addCurrentTime = () => {
+  return {
+    type: "ADD_CURRENT_TIME"
+  }
+}
+
+export const reduceCurrentTime = () => {
+  return {
+    type: "REDUCE_CURRENT_TIME"
+  }
+}
+
+export const setOffsetProperties = event => {
+  console.log("parent", event.target.parentElement)
+  const left = event.target.parentElement.offsetLeft
+  const width = event.target.parentElement.offsetWidth
+  console.log("width", event.target.parentElement.offsetWidth)
+  return {
+    type: "SET_OFFSETS",
+    value: {
+      left: left,
+      width: width
+    }
+  }
+}
+
+export const setCurrentTime = position => {
+  return {
+    type: "SET_CURRENT_TIME",
+    value: position
   }
 }
