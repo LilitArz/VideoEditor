@@ -1,5 +1,17 @@
 import React, { Component } from "react"
-
+const styles = {
+  playPause: {
+    width: "50px",
+    height: "50px",
+    top: "250px",
+    left: "500px",
+    position: "absolute"
+  },
+  videoSize: {
+    width: "73%",
+    height: "20%"
+  }
+}
 export class Video extends Component {
   constructor() {
     super()
@@ -54,41 +66,31 @@ export class Video extends Component {
     this.props.changeVideoDuration(duration)
   }
   render() {
+    const { link, isPaused, playVideo, pauseVideo } = this.props
     return (
       <div>
         <video
           id="video"
           ref={ref => (this.values = ref)}
-          style={{
-            width: "73%",
-            height: "20%"
-          }}
-          src={this.props.link}
+          style={styles.videoSize}
+          src={link}
           onClick={e => {
             this.changeVisiblity()
-            this.props.isPaused
-              ? this.props.playVideo()
-              : this.props.pauseVideo()
+            isPaused ? playVideo() : pauseVideo()
           }}
           onLoadedMetadata={e => {
             this.setDuration(e.target.duration)
           }}
         />
         <img
-          src={this.props.isPaused ? "/photos/play.png" : "/photos/pause.png"}
+          src={isPaused ? "/photos/play.png" : "/photos/pause.png"}
           style={{
-            width: "50px",
-            height: "50px",
-            top: "250px",
-            left: "500px",
-            position: "absolute",
+            ...styles.playPause,
             visibility: this.state.isVisible ? "visible" : "hidden"
           }}
           onClick={e => {
             this.changeVisiblity()
-            this.props.isPaused
-              ? this.props.playVideo()
-              : this.props.pauseVideo()
+            isPaused ? playVideo() : pauseVideo()
           }}
         />
       </div>
