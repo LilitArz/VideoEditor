@@ -123,11 +123,7 @@ export const reduceCurrentTime = () => {
   }
 }
 
-export const setOffsetProperties = event => {
-  console.log("parent", event.target.parentElement)
-  const left = event.target.parentElement.offsetLeft
-  const width = event.target.parentElement.offsetWidth
-  console.log("width", event.target.parentElement.offsetWidth)
+export const setOffsetProperties = (left, width) => {
   return {
     type: "SET_OFFSETS",
     value: {
