@@ -17,7 +17,12 @@ import {
   changeSliderAxis,
   pauseSlicedVideo,
   finished,
-  changeCurrentTime
+  changeCurrentTime,
+  deleteSelectedPart,
+  addCurrentTime,
+  reduceCurrentTime,
+  setOffsetProperties,
+  setCurrentTime
 } from "../redux/action"
 import { Button } from "./Button"
 import { Video } from "./Video"
@@ -39,7 +44,12 @@ const actionCreators = dispatch =>
       changeSliderAxis,
       pauseSlicedVideo,
       finished,
-      changeCurrentTime
+      changeCurrentTime,
+      deleteSelectedPart,
+      addCurrentTime,
+      reduceCurrentTime,
+      setOffsetProperties,
+      setCurrentTime
     },
     dispatch
   )
@@ -57,7 +67,8 @@ const mapStateToProps = store => {
     currentTime: store.currentTime,
     activePartitionIndex: store.activePartitionIndex,
     sliderLeftValues: store.sliderLeftValues,
-    checkForFinish: store.checkForFinish
+    checkForFinish: store.checkForFinish,
+    activePartitionOffsets: store.activePartitionOffsets
   }
 }
 
@@ -104,6 +115,13 @@ class VideoHolder extends Component {
           videoDuration={this.props.videoDuration}
           changeSliderAxis={this.props.changeSliderAxis}
           sliderLeftValues={this.props.sliderLeftValues}
+          deleteSelectedPart={this.props.deleteSelectedPart}
+          addCurrentTime={this.props.addCurrentTime}
+          reduceCurrentTime={this.props.reduceCurrentTime}
+          activePartitionIndex={this.props.activePartitionIndex}
+          setOffsetProperties={this.props.setOffsetProperties}
+          activePartitionOffsets={this.props.activePartitionOffsets}
+          setCurrentTime={this.props.setCurrentTime}
         />
 
         <Button addLink={this.props.addLink} />
