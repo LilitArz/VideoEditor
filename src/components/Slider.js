@@ -8,12 +8,26 @@ export class Slider extends Component {
 
   callback = e => {
     if (this.isDowned) {
-      this.props.changeSliderAxis(e.clientX)
+      this.props.changeSliderAxis(e.clientX, this.props.activePartitionOffsets)
     }
+  }
+  calculateSliderPosition = e => {
+    const duration =
+      this.props.slicedDurationArray[this.props.activePartitionIndex]
+        .startPoint -
+      this.props.slicedDurationArray[this.props.activePartitionIndex].endPoint
+    const position = Math.round(
+      (e.clientX - this.props.activePartitionOffsets.left) /
+        this.props.activePartitionOffsets.width *
+        100
+    )
+    return position * duration / 100
   }
   mouseUp = event => {
     if (this.isDowned) {
       this.isDowned = false
+      const position = this.calculateSliderPosition(event)
+      this.props.setCurrentTime(position)
     }
   }
   componentDidMount() {
@@ -28,6 +42,7 @@ export class Slider extends Component {
     return (
       <div>
         <div
+          ref={ref => (this.left = ref)}
           style={{
             position: "absolute",
             width: "30px",
