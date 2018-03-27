@@ -14,7 +14,8 @@ const initialState = {
   activePartitionIndex: 0,
   sliceActionPartameters: {},
   isSlicedVideoPlayed: false,
-  checkForFinish: 0
+  checkForFinish: 0,
+  activePartitionOffsets: { left: 0, width: 967 }
 }
 
 export const reducer = (state = initialState, action) => {
@@ -63,38 +64,14 @@ export const reducer = (state = initialState, action) => {
         currentTime: state.slicedDurationArray[action.value.key].startPoint
       }
     case "SLICE":
-      const splittedParts = state.slicedDurationArray.reduce((acc, item) => {
-        const values = Object.values(item)
-        return [...acc, ...values]
-      }, [])
-
-      const positionToSplit = state.sliceActionPartameters.percent
-      const partsWithSplittingPosition = [
-        ...splittedParts,
-        positionToSplit,
-        positionToSplit
-      ]
-      const sortedParts = partsWithSplittingPosition.sort((a, b) => a - b)
-
-      const completeParts = sortedParts.reduce((acc, item, index, array) => {
-        if (index % 2 == 0) {
-          const splittedPart = {
-            startPoint: item,
-            endPoint: array[index + 1]
-          }
-          return [...acc, splittedPart]
-        } else {
-          return acc
-        }
-      }, [])
       return {
         ...state,
-        slicedDurationArray: completeParts,
+        slicedDurationArray: action.value,
         sliderLeftValues: [
           { value: "0px" },
           ...state.sliderLeftValues.slice(0)
         ],
-        currentTime: completeParts[state.activePartitionIndex].startPoint
+        currentTime: action.value[state.activePartitionIndex].startPoint
       }
 
     case "PLAY_SLICED_VIDEO":
@@ -125,7 +102,36 @@ export const reducer = (state = initialState, action) => {
         ...state,
         checkForFinish: 0
       }
-
+    case "DELETE":
+      return {
+        ...state,
+        slicedDurationArray: [
+          ...state.slicedDurationArray.slice(0, state.activePartitionIndex),
+          ...state.slicedDurationArray.slice(state.activePartitionIndex + 1)
+        ],
+        activePartitionIndex: state.activePartitionIndex - 1,
+        currentTime: 0
+      }
+    case "ADD_CURRENT_TIME":
+      return {
+        ...state,
+        currentTime: state.currentTime + 1
+      }
+    case "REDUCE_CURRENT_TIME":
+      return {
+        ...state,
+        currentTime: state.currentTime - 1
+      }
+    case "SET_OFFSETS":
+      return {
+        ...state,
+        activePartitionOffsets: action.value
+      }
+    case "SET_CURRENT_TIME":
+      return {
+        ...state,
+        currentTime: action.value * -1
+      }
     default:
       return state
   }
