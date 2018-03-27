@@ -13,6 +13,41 @@ const styles = {
     height: "30px",
     backgroundColor: " #C0C0C0",
     float: "left"
+  },
+  playPause: {
+    padding: "5px 5px",
+    height: "20px",
+    width: "20px",
+    position: "relative"
+  },
+  next: {
+    bottom: "30px",
+    left: "100px",
+    height: "20px",
+    width: "20px",
+    position: "relative"
+  },
+  prev: {
+    bottom: "53px",
+    left: "60px",
+    height: "20px",
+    width: "20px",
+    position: "relative"
+  },
+  cross: {
+    bottom: "77px",
+    left: "140px",
+    height: "20px",
+    width: "20px",
+    position: "relative"
+  },
+  scissors: {
+    width: "25px",
+    height: "25px",
+    position: "relative",
+    bottom: "27px",
+    left: "770px",
+    float: "left"
   }
 }
 
@@ -21,9 +56,9 @@ export class VideoSlicer extends Component {
     if (duration != 0) {
       const diff = end - start
       const percent = diff * 100 / duration
-      return percent + "%"
+      return `${percent}%`
     } else {
-      return 0 + "%"
+      return `${0}%`
     }
   }
 
@@ -56,7 +91,10 @@ export class VideoSlicer extends Component {
         onClick={event => {
           const position = this.calculatePosition(event)
           this.props.setParameters(position, key)
-          this.props.setOffsetProperties(event)
+          this.props.setOffsetProperties(
+            event.target.parentElement.offsetLeft,
+            event.target.parentElement.offsetWidth
+          )
         }}
       >
         <Slider
@@ -76,7 +114,14 @@ export class VideoSlicer extends Component {
     const {
       videoDuration,
       slicedDurationArray,
-      isSlicedVideoPlayed
+      isSlicedVideoPlayed,
+      pauseSlicedVideo,
+      playSlicedVideo,
+      addCurrentTime,
+      reduceCurrentTime,
+      deleteSelectedPart,
+      sliceActionPartameters,
+      slicer
     } = this.props
     return (
       <div
@@ -95,56 +140,31 @@ export class VideoSlicer extends Component {
                   ? "/photos/pause.png"
                   : "/photos/playButton.png"
               }
-              style={{
-                padding: "5px 5px",
-                height: "20px",
-                width: "20px",
-                position: "relative"
-              }}
+              style={styles.playPause}
               onClick={() => {
-                this.props.isSlicedVideoPlayed
-                  ? this.props.pauseSlicedVideo()
-                  : this.props.playSlicedVideo()
+                isSlicedVideoPlayed ? pauseSlicedVideo() : playSlicedVideo()
               }}
             />
           </li>
           <li>
             <img
               src="/photos/Next.png"
-              style={{
-                bottom: "30px",
-                left: "100px",
-                height: "20px",
-                width: "20px",
-                position: "relative"
-              }}
-              onClick={() => this.props.addCurrentTime()}
+              style={styles.next}
+              onClick={() => addCurrentTime()}
             />
           </li>
           <li>
             <img
               src="/photos/Previous.png"
-              style={{
-                bottom: "53px",
-                left: "60px",
-                height: "20px",
-                width: "20px",
-                position: "relative"
-              }}
-              onClick={() => this.props.reduceCurrentTime()}
+              style={styles.prev}
+              onClick={() => reduceCurrentTime()}
             />
           </li>
           <li>
             <img
               src="/photos/cross.png"
-              style={{
-                bottom: "77px",
-                left: "140px",
-                height: "20px",
-                width: "20px",
-                position: "relative"
-              }}
-              onClick={() => this.props.deleteSelectedPart()}
+              style={styles.cross}
+              onClick={() => deleteSelectedPart()}
             />
           </li>
         </ul>
@@ -152,20 +172,10 @@ export class VideoSlicer extends Component {
         <img
           class="divide"
           src="/photos/scissors.jpg"
-          style={{
-            width: "25px",
-            height: "25px",
-            position: "relative",
-            bottom: "27px",
-            left: "770px",
-            float: "left"
-          }}
+          style={styles.scissors}
           onClick={() => {
-            if (Object.keys(this.props.sliceActionPartameters).length !== 0) {
-              this.props.slicer(
-                this.props.sliceActionPartameters,
-                this.props.slicedDurationArray
-              )
+            if (Object.keys(sliceActionPartameters).length !== 0) {
+              slicer(sliceActionPartameters, slicedDurationArray)
             }
           }}
         />
