@@ -48,7 +48,9 @@ export class Video extends Component {
     const videoElement = document.getElementById("video")
     if (nextProps.isSlicedVideoPlayed) {
       this.playSlicedVideo()
-    } else nextProps.isPaused ? videoElement.pause() : videoElement.play()
+    } else {
+      nextProps.isPaused ? videoElement.pause() : videoElement.play()
+    }
   }
 
   setDuration = duration => {
