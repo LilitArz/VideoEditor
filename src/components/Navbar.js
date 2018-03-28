@@ -37,6 +37,13 @@ const styles = {
     top: "15px",
     right: "150px"
   },
+  volumeValue: {
+    padding: "50px 15px 80px 15px",
+    position: "relative",
+    top: "40px",
+    right: "230px",
+    fontSize: "25px"
+  },
   undo: {
     width: "40px",
     height: "40px",
@@ -94,7 +101,7 @@ export class Navbar extends Component {
         </li>
         <li style={styles.righFloat}>
           <span style={styles.projectVolume}>Project Volume</span>
-          <span style={styles.duration}>{this.props.projectVolume}</span>
+          <span style={styles.volumeValue}>{this.props.projectVolume}</span>
           <input
             type="range"
             value={this.props.projectVolume}
