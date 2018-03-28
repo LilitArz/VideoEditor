@@ -49,20 +49,7 @@ export const setParameters = (percent, key) => {
  * @param {*} slicedDurationArray
  * @description
  */
-export const slicer = (sliceActionPartameters, slicedDurationArray) => {
-  const splittedParts = slicedDurationArray.reduce((acc, item) => {
-    const values = Object.values(item)
-    return [...acc, ...values]
-  }, [])
-
-  const positionToSplit = sliceActionPartameters.percent
-  const partsWithSplittingPosition = [
-    ...splittedParts,
-    positionToSplit,
-    positionToSplit
-  ]
-  const sortedParts = partsWithSplittingPosition.sort((a, b) => a - b)
-
+const collectPositions = sortedParts => {
   const completeParts = sortedParts.reduce((acc, item, index, array) => {
     if (index % 2 == 0) {
       const splittedPart = {
@@ -74,6 +61,36 @@ export const slicer = (sliceActionPartameters, slicedDurationArray) => {
       return acc
     }
   }, [])
+  return completeParts
+}
+
+/**
+ *
+ * @param {*} sliceActionPartameters
+ * @param {*} slicedDurationArray
+ * @description
+ */
+const pushPosition = (sliceActionPartameters, slicedDurationArray) => {
+  const splittedParts = slicedDurationArray.reduce((acc, item) => {
+    const values = Object.values(item)
+    return [...acc, ...values]
+  }, [])
+
+  const positionToSplit = sliceActionPartameters.percent
+  const partsWithSplittingPosition = [
+    ...splittedParts,
+    positionToSplit,
+    positionToSplit
+  ]
+  return partsWithSplittingPosition.sort((a, b) => a - b)
+}
+
+export const slicer = (sliceActionPartameters, slicedDurationArray) => {
+  const splittedParts = pushPosition(
+    sliceActionPartameters,
+    slicedDurationArray
+  )
+  const completeParts = collectPositions(splittedParts)
   return {
     type: "SLICE",
     value: completeParts
