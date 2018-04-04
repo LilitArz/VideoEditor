@@ -3,7 +3,8 @@ import { store } from "../redux/store"
 
 import { connect } from "react-redux"
 import { bindActionCreators } from "redux"
-
+import ReactDOMServer from "react-dom/server"
+import { Test } from "./Test"
 import {
   playVideo,
   addLink,
@@ -71,7 +72,6 @@ const mapStateToProps = store => {
     activePartitionOffsets: store.activePartitionOffsets
   }
 }
-
 class VideoHolder extends Component {
   render() {
     return (
@@ -82,18 +82,19 @@ class VideoHolder extends Component {
           float: "left"
         }}
       >
+        <Test />
         <Video
           link={this.props.link}
+          finished={this.props.finished}
           isPaused={this.props.isPaused}
           playVideo={this.props.playVideo}
           pauseVideo={this.props.pauseVideo}
+          currentTime={this.props.currentTime}
+          checkForFinish={this.props.checkForFinish}
+          slicedDurationArray={this.props.slicedDurationArray}
           changeVideoDuration={this.props.changeDuration}
           isSlicedVideoPlayed={this.props.isSlicedVideoPlayed}
           activePartitionIndex={this.props.activePartitionIndex}
-          currentTime={this.props.currentTime}
-          slicedDurationArray={this.props.slicedDurationArray}
-          checkForFinish={this.props.checkForFinish}
-          finished={this.props.finished}
         />
         <Navbar
           videoLink={this.props.link}
