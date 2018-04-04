@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "eslint-check": "eslint --print-config .eslintrc.js | eslint-config-prettier-check",
+    "eslint-check":
+      "eslint --print-config .eslintrc.js | eslint-config-prettier-check",
     "flow": "./node_modules/.bin/flow",
     "lint": "./node_modules/.bin/eslint",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -18,8 +19,9 @@
     "@babel/plugin-proposal-class-properties": "^7.0.0-beta.40",
     "@babel/preset-env": "^7.0.0-beta.40",
     "babel-loader": "^8.0.0-beta.0",
-    "babel-plugin-transform-react-jsx": "~6.24.1",
     "material-ui": "^0.20.0",
+    "pug": "^2.0.3",
+    "pug-html-loader": "^1.1.5",
     "react": "~16.2.0",
     "react-dom": "~16.2.0",
     "react-redux": "~5.0.7",
@@ -28,9 +30,9 @@
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
     "babel-preset-flow": "^6.23.0",
     "css-loader": "^0.28.11",
-    "style-loader": "^0.20.3",
     "eslint": "^4.16.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-flowtype": "^2.41.0",
@@ -38,9 +40,12 @@
     "eslint-plugin-react": "^7.5.1",
     "eslint-plugin-standard": "^3.0.1",
     "flow-bin": "^0.52.0",
+    "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.0.4",
     "prettier": "^1.10.2",
+    "raw-loader": "^0.5.1",
     "remove-flow-types-loader": "^1.0.0",
+    "style-loader": "^0.20.3",
     "webpack": "^4.1.0",
     "webpack-cli": "^2.0.10"
   }
