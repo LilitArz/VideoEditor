@@ -6,9 +6,6 @@ module.exports = {
     path: __dirname + "/dist",
     filename: "source.js"
   },
-  node: {
-    fs: "empty"
-  },
   module: {
     rules: [
       {
