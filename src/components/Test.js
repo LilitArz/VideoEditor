@@ -1,8 +1,5 @@
 import React, { Component } from "react"
 const pugFile = require("../../pug/index.pug")
-const zibil = pugFile.replace("import React from 'react;", "")
-import convert from "htmr"
-console.log(pugFile)
 
 export class Test extends Component {
   constructor() {
@@ -60,7 +57,6 @@ export class Test extends Component {
 
   componentDidMount() {
     this.container = document.getElementsByClassName("container")[0]
-    console.log(this.container)
     for (let i = 0; i < this.container.childNodes.length; ++i) {
       this.container.childNodes[i].addEventListener("click", this.func)
     }
