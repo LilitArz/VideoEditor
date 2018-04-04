@@ -6,11 +6,18 @@ module.exports = {
     path: __dirname + "/dist",
     filename: "source.js"
   },
+  node: {
+    fs: "empty"
+  },
   module: {
     rules: [
       {
         test: /\.css$/,
         use: [{ loader: "style-loader" }, { loader: "css-loader" }]
+      },
+      {
+        test: /\.pug$/,
+        use: [{ loader: "raw-loader" }, { loader: "pug-html-loader" }]
       },
       {
         test: /\.js$/,
